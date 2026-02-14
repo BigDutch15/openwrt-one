@@ -82,6 +82,21 @@ set_hostname() {
 	return 0
 }
 
+# Set system timezone
+set_timezone() {
+	local timezone_name="$1"
+	local timezone="$2"
+	
+	echo "[INFO] Setting system timezone to $timezone_name..."
+	uci set system.@system[0].zonename="$timezone_name"
+	uci set system.@system[0].timezone="$timezone"
+	if ! uci commit system; then
+		echo "[ERROR] Failed to commit system timezone changes"
+		return 1
+	fi
+	return 0
+}
+
 # ====================================================================
 # Service Management Functions
 # ====================================================================
