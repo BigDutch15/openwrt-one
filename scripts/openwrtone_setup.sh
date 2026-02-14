@@ -6,6 +6,10 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 REQUIRED_HARDWARE="OpenWrt One"
 
+
+# Load configuration
+router_name=${ROUTER_NAME:-"OpenWrt"}
+
 # ====================================================================
 # STEP 0: Validate hardware
 # ====================================================================
@@ -17,3 +21,19 @@ fi
 # STEP 1: Detect WAN interface for firewall configuration
 # ====================================================================
 detect_wan_interface
+
+
+# ====================================================================
+# STEP 2: Set system information
+# ====================================================================
+if ! set_hostname "$router_name"; then
+    exit 1
+fi
+
+
+# ====================================================================
+# STEP 3: Apply configuration changes
+# ====================================================================
+if ! restart_services; then
+    exit 1
+fi

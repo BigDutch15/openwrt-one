@@ -64,3 +64,36 @@ detect_wan_interface() {
 	export NET_IF
 	export FW_WAN
 }
+
+# ====================================================================
+# System Configuration Functions
+# ====================================================================
+
+# Set system hostname
+set_hostname() {
+	local hostname="$1"
+	
+	echo "[INFO] Setting system hostname to $hostname..."
+	uci set system.@system[0].hostname="$hostname"
+	if ! uci commit system; then
+		echo "[ERROR] Failed to commit system hostname changes"
+		return 1
+	fi
+	return 0
+}
+
+# ====================================================================
+# Service Management Functions
+# ====================================================================
+
+
+# Restart all services to apply configuration
+restart_services() {
+	echo "[INFO] Reload the system service..."
+	if ! /etc/init.d/system reload; then
+		echo "[WARNING] Failed to reload system service (non-critical)"
+	fi
+
+	echo "[SUCCESS] All services restarted successfully"
+	return 0
+}
