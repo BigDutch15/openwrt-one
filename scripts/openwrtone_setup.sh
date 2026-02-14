@@ -12,3 +12,8 @@ REQUIRED_HARDWARE="OpenWrt One"
 if ! validate_hardware "$REQUIRED_HARDWARE"; then
     exit 1
 fi
+
+# ====================================================================
+# STEP 1: Detect WAN interface for firewall configuration
+# ====================================================================
+detect_wan_interface

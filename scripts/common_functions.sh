@@ -46,3 +46,21 @@ validate_hardware() {
 	
 	return 0
 }
+
+# ====================================================================
+# Network Configuration Functions
+# ====================================================================
+
+# Detect WAN interface for firewall configuration
+detect_wan_interface() {
+	echo "[INFO] Detecting WAN interface for firewall rules..."
+	. /lib/functions/network.sh
+	network_flush_cache
+	network_find_wan NET_IF
+	FW_WAN="$(fw4 -q network ${NET_IF})"
+	echo "[INFO] WAN interface detected: $NET_IF (firewall zone: $FW_WAN)"
+	
+	# Export for use in calling script
+	export NET_IF
+	export FW_WAN
+}
